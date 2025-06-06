@@ -19,8 +19,9 @@ repos:
     hooks:
     -   id: isort
 
--   repo: https://github.com/pycqa/flake8
-    rev: 6.0.0
+  - repo: https://github.com/forkwork/codetypo
+    rev: v2.3.0
     hooks:
-    -   id: flake8
-        additional_dependencies: [flake8-docstrings]
+      - id: codetypo
+        additional_dependencies:
+          - tomli

@@ -83,15 +83,16 @@ class Color:
         # Color(r=255, g=255, b=255)
         ```
 
-    | Constant   | Hex Code   | RGB              |
-    |------------|------------|------------------|
-    | `WHITE`    | `#FFFFFF`  | `(255, 255, 255)`|
-    | `BLACK`    | `#000000`  | `(0, 0, 0)`      |
-    | `RED`      | `#FF0000`  | `(255, 0, 0)`    |
-    | `GREEN`    | `#00FF00`  | `(0, 255, 0)`    |
-    | `BLUE`     | `#0000FF`  | `(0, 0, 255)`    |
-    | `YELLOW`   | `#FFFF00`  | `(255, 255, 0)`  |
-    | `KHULNASOFT` | `#A351FB`  | `(163, 81, 251)` |
+    | Constant   | Hex Code   | RGB               |
+    |------------|------------|-------------------|
+    | `WHITE`    | `#FFFFFF`  | `(255, 255, 255)` |
+    | `BLACK`    | `#000000`  | `(0, 0, 0)`       |
+    | `GREY`     | `#808080`  | `(128, 128, 128)` |
+    | `RED`      | `#FF0000`  | `(255, 0, 0)`     |
+    | `GREEN`    | `#00FF00`  | `(0, 255, 0)`     |
+    | `BLUE`     | `#0000FF`  | `(0, 0, 255)`     |
+    | `YELLOW`   | `#FFFF00`  | `(255, 255, 0)`   |
+    | `KHULNASOFT` | `#A351FB`  | `(163, 81, 251)`  |
     """
 
     r: int
@@ -236,6 +237,10 @@ class Color:
         return Color.from_hex("#000000")
 
     @classproperty
+    def GREY(cls) -> Color:
+        return Color.from_hex("#808080")
+
+    @classproperty
     def RED(cls) -> Color:
         return Color.from_hex("#FF0000")
 
@@ -361,7 +366,7 @@ class ColorPalette:
 
         ![visualized_color_palette](https://media.khulnasoft.com/
         superverse-annotator-examples/visualized_color_palette.png)
-        """
+        """  # noqa: E501 // docs
         mpl_palette = plt.get_cmap(palette_name, color_count)
 
         if hasattr(mpl_palette, "colors"):

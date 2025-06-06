@@ -1,10 +1,10 @@
 from contextlib import ExitStack as DoesNotRaise
+from test.test_utils import mock_detections
 from typing import List, Optional
 
 import pytest
 
 from superverse import DetectionDataset
-from test.test_utils import mock_detections
 
 
 @pytest.mark.parametrize(
@@ -33,7 +33,9 @@ from test.test_utils import mock_detections
                 DetectionDataset(classes=["dog", "person"], images=[], annotations={}),
                 DetectionDataset(classes=["cat"], images=[], annotations={}),
             ],
-            DetectionDataset(classes=["cat", "dog", "person"], images=[], annotations={}),
+            DetectionDataset(
+                classes=["cat", "dog", "person"], images=[], annotations={}
+            ),
             DoesNotRaise(),
         ),  # two datasets; no images and annotations, different classes
         (

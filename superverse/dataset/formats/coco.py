@@ -6,18 +6,13 @@ from typing import TYPE_CHECKING, Dict, List, Tuple
 import numpy as np
 import numpy.typing as npt
 
-from superverse.dataset.utils import (
-    approximate_mask_with_polygons,
-    map_detections_class_id,
-    mask_to_rle,
-    rle_to_mask,
-)
+from superverse.dataset.utils import (approximate_mask_with_polygons,
+                                      map_detections_class_id, mask_to_rle,
+                                      rle_to_mask)
 from superverse.detection.core import Detections
-from superverse.detection.utils import (
-    contains_holes,
-    contains_multiple_segments,
-    polygon_to_mask,
-)
+from superverse.detection.utils import (contains_holes,
+                                        contains_multiple_segments,
+                                        polygon_to_mask)
 from superverse.utils.file import read_json_file, save_json_file
 
 if TYPE_CHECKING:
@@ -106,7 +101,9 @@ def coco_annotations_to_detections(
         mask = coco_annotations_to_masks(
             image_annotations=image_annotations, resolution_wh=resolution_wh
         )
-        return Detections(class_id=np.asarray(class_ids, dtype=int), xyxy=xyxy, mask=mask)
+        return Detections(
+            class_id=np.asarray(class_ids, dtype=int), xyxy=xyxy, mask=mask
+        )
 
     return Detections(xyxy=xyxy, class_id=np.asarray(class_ids, dtype=int))
 

@@ -2,9 +2,12 @@
 name = "superverse"
 version = "0.3.0"
 description = "A set of easy-to-use utils that will come in handy in any Computer Vision project"
-authors = ["Md Sulaiman <dev.sulaiman@icloud.com>"]
+requires-python = ">=3.10"
+authors = [
+    { name = "Md Sulaiman <dev.sulaiman@icloud.com>" }
+]
 maintainers = [
-    "Md Sulaiman <dev.sulaiman@icloud.com>",
+    { name = "Md Sulaiman <dev.sulaiman@icloud.com>" }
 ]
 readme = "README.md"
 license = "MIT"

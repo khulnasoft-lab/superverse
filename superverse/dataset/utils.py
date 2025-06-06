@@ -10,11 +10,9 @@ import numpy as np
 import numpy.typing as npt
 
 from superverse.detection.core import Detections
-from superverse.detection.utils import (
-    approximate_polygon,
-    filter_polygons_by_area,
-    mask_to_polygons,
-)
+from superverse.detection.utils import (approximate_polygon,
+                                        filter_polygons_by_area,
+                                        mask_to_polygons)
 
 if TYPE_CHECKING:
     from superverse.dataset.core import DetectionDataset
@@ -98,7 +96,9 @@ def map_detections_class_id(
     return detections_copy
 
 
-def save_dataset_images(dataset: "DetectionDataset", images_directory_path: str) -> None:
+def save_dataset_images(
+    dataset: "DetectionDataset", images_directory_path: str
+) -> None:
     Path(images_directory_path).mkdir(parents=True, exist_ok=True)
     for image_path in dataset.image_paths:
         final_path = os.path.join(images_directory_path, Path(image_path).name)

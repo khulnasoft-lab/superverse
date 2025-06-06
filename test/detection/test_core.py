@@ -1,12 +1,13 @@
 from contextlib import ExitStack as DoesNotRaise
+from test.test_utils import mock_detections
 from typing import List, Optional, Union
 
 import numpy as np
 import pytest
 
-from superverse.detection.core import Detections, merge_inner_detection_object_pair
+from superverse.detection.core import (Detections,
+                                       merge_inner_detection_object_pair)
 from superverse.geometry.core import Position
-from test.test_utils import mock_detections
 
 PREDICTIONS = np.array(
     [
@@ -155,7 +156,9 @@ TEST_DET_DIFFERENT_METADATA = Detections(
         ),  # take only detections with confidence > 0.5
         (
             DETECTIONS,
-            np.array([True, True, True, True, True, True, True, True, True], dtype=bool),
+            np.array(
+                [True, True, True, True, True, True, True, True, True], dtype=bool
+            ),
             DETECTIONS,
             DoesNotRaise(),
         ),  # take all detections
@@ -215,10 +218,18 @@ TEST_DET_DIFFERENT_METADATA = Detections(
         (DETECTIONS, np.array([0, 2, 10]), None, pytest.raises(IndexError)),
         (
             DETECTIONS,
-            np.array([True, True, True, True, True, True, True, True, True, True, True]),
+            np.array(
+                [True, True, True, True, True, True, True, True, True, True, True]
+            ),
             None,
             pytest.raises(IndexError),
         ),
+        (
+            Detections.empty(),
+            np.isin(Detections.empty()["class_name"], ["cat", "dog"]),
+            Detections.empty(),
+            DoesNotRaise(),
+        ),  # Filter an empty detections by specific class names
     ],
 )
 def test_getitem(

@@ -9,17 +9,12 @@ from matplotlib import pyplot as plt
 
 from superverse.config import ORIENTED_BOX_COORDINATES
 from superverse.detection.core import Detections
-from superverse.detection.utils import (
-    box_iou_batch,
-    mask_iou_batch,
-    oriented_box_iou_batch,
-)
+from superverse.detection.utils import (box_iou_batch, mask_iou_batch,
+                                        oriented_box_iou_batch)
 from superverse.draw.color import LEGACY_COLOR_PALETTE
 from superverse.metrics.core import Metric, MetricTarget
-from superverse.metrics.utils.object_size import (
-    ObjectSizeCategory,
-    get_detection_size_category,
-)
+from superverse.metrics.utils.object_size import (ObjectSizeCategory,
+                                                  get_detection_size_category)
 from superverse.metrics.utils.utils import ensure_pandas_installed
 
 if TYPE_CHECKING:
@@ -210,9 +205,13 @@ class MeanAveragePrecision(Metric):
                     elif self._metric_target == MetricTarget.MASKS:
                         iou = mask_iou_batch(target_contents, prediction_contents)
                     elif self._metric_target == MetricTarget.ORIENTED_BOUNDING_BOXES:
-                        iou = oriented_box_iou_batch(target_contents, prediction_contents)
+                        iou = oriented_box_iou_batch(
+                            target_contents, prediction_contents
+                        )
                     else:
-                        raise ValueError("Unsupported metric target for IoU calculation")
+                        raise ValueError(
+                            "Unsupported metric target for IoU calculation"
+                        )
 
                     matches = self._match_detection_batch(
                         predictions.class_id, targets.class_id, iou, iou_thresholds
@@ -352,10 +351,10 @@ class MeanAveragePrecision(Metric):
             precision = true_positives / (true_positives + false_positives)
 
             for iou_level_idx in range(matches.shape[1]):
-                average_precisions[class_idx, iou_level_idx] = (
-                    MeanAveragePrecision._compute_average_precision(
-                        recall[:, iou_level_idx], precision[:, iou_level_idx]
-                    )
+                average_precisions[
+                    class_idx, iou_level_idx
+                ] = MeanAveragePrecision._compute_average_precision(
+                    recall[:, iou_level_idx], precision[:, iou_level_idx]
                 )
 
         return average_precisions, unique_classes

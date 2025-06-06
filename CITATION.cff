@@ -8,10 +8,10 @@ message: >-
   metadata from this file.
 type: software
 authors:
-  - given-names: Khulnasoft
+  - given-names: KhulnaSoft
     email: support@khulnasoft.com
-repository-code: "https://github.com/khulnasoft/superverse"
-url: "https://khulnasoft.github.io/superverse/"
+repository-code: "https://github.com/khulnasoft-lab/superverse"
+url: "https://khulnasoft-lab.github.io/superverse/"
 abstract: >-
   superverse features a range of utilities for use in
   computer vision projects, from detections processing and

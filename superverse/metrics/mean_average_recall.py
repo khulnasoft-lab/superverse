@@ -9,17 +9,12 @@ from matplotlib import pyplot as plt
 
 from superverse.config import ORIENTED_BOX_COORDINATES
 from superverse.detection.core import Detections
-from superverse.detection.utils import (
-    box_iou_batch,
-    mask_iou_batch,
-    oriented_box_iou_batch,
-)
+from superverse.detection.utils import (box_iou_batch, mask_iou_batch,
+                                        oriented_box_iou_batch)
 from superverse.draw.color import LEGACY_COLOR_PALETTE
 from superverse.metrics.core import Metric, MetricTarget
-from superverse.metrics.utils.object_size import (
-    ObjectSizeCategory,
-    get_detection_size_category,
-)
+from superverse.metrics.utils.object_size import (ObjectSizeCategory,
+                                                  get_detection_size_category)
 from superverse.metrics.utils.utils import ensure_pandas_installed
 
 if TYPE_CHECKING:
@@ -145,7 +140,10 @@ class MeanAverageRecall(Metric):
         )
         result.small_objects = self._compute(small_predictions, small_targets)
 
-        medium_predictions, medium_targets = self._filter_predictions_and_targets_by_size(
+        (
+            medium_predictions,
+            medium_targets,
+        ) = self._filter_predictions_and_targets_by_size(
             self._predictions_list, self._targets_list, ObjectSizeCategory.MEDIUM
         )
         result.medium_objects = self._compute(medium_predictions, medium_targets)
@@ -184,9 +182,13 @@ class MeanAverageRecall(Metric):
                     elif self._metric_target == MetricTarget.MASKS:
                         iou = mask_iou_batch(target_contents, prediction_contents)
                     elif self._metric_target == MetricTarget.ORIENTED_BOUNDING_BOXES:
-                        iou = oriented_box_iou_batch(target_contents, prediction_contents)
+                        iou = oriented_box_iou_batch(
+                            target_contents, prediction_contents
+                        )
                     else:
-                        raise ValueError("Unsupported metric target for IoU calculation")
+                        raise ValueError(
+                            "Unsupported metric target for IoU calculation"
+                        )
 
                     matches = self._match_detection_batch(
                         predictions.class_id, targets.class_id, iou, iou_thresholds
@@ -214,9 +216,11 @@ class MeanAverageRecall(Metric):
             )
 
         concatenated_stats = [np.concatenate(items, 0) for items in zip(*stats)]
-        recall_scores_per_k, recall_per_class, unique_classes = (
-            self._compute_average_recall_for_classes(*concatenated_stats)
-        )
+        (
+            recall_scores_per_k,
+            recall_per_class,
+            unique_classes,
+        ) = self._compute_average_recall_for_classes(*concatenated_stats)
 
         return MeanAverageRecallResult(
             metric_target=self._metric_target,
@@ -567,7 +571,9 @@ class MeanAverageRecallResult:
         )
         if self.recall_per_class.size == 0:
             out_str += "  No results\n"
-        for class_id, recall_of_class in zip(self.matched_classes, self.recall_per_class):
+        for class_id, recall_of_class in zip(
+            self.matched_classes, self.recall_per_class
+        ):
             out_str += f"  {class_id}: {recall_of_class}\n"
 
         indent = "  "
@@ -662,8 +668,7 @@ class MeanAverageRecallResult:
         ax.set_ylim(0, 1)
         ax.set_ylabel("Value", fontweight="bold")
         title = (
-            f"Mean Average Recall, by Object Size"
-            f"\n(target: {self.metric_target.value})"
+            f"Mean Average Recall, by Object Size\n(target: {self.metric_target.value})"
         )
         ax.set_title(title, fontweight="bold")
 

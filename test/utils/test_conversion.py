@@ -1,12 +1,9 @@
 import numpy as np
 from PIL import Image, ImageChops
 
-from superverse.utils.conversion import (
-    cv2_to_pillow,
-    ensure_cv2_image_for_processing,
-    images_to_cv2,
-    pillow_to_cv2,
-)
+from superverse.utils.conversion import (cv2_to_pillow,
+                                         ensure_cv2_image_for_processing,
+                                         images_to_cv2, pillow_to_cv2)
 
 
 def test_ensure_cv2_image_for_processing_when_pillow_image_submitted(

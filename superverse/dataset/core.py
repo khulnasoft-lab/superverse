@@ -11,26 +11,17 @@ import cv2
 import numpy as np
 
 from superverse.classification.core import Classifications
-from superverse.dataset.formats.coco import (
-    load_coco_annotations,
-    save_coco_annotations,
-)
-from superverse.dataset.formats.pascal_voc import (
-    detections_to_pascal_voc,
-    load_pascal_voc_annotations,
-)
-from superverse.dataset.formats.yolo import (
-    load_yolo_annotations,
-    save_data_yaml,
-    save_yolo_annotations,
-)
-from superverse.dataset.utils import (
-    build_class_index_mapping,
-    map_detections_class_id,
-    merge_class_lists,
-    save_dataset_images,
-    train_test_split,
-)
+from superverse.dataset.formats.coco import (load_coco_annotations,
+                                             save_coco_annotations)
+from superverse.dataset.formats.pascal_voc import (detections_to_pascal_voc,
+                                                   load_pascal_voc_annotations)
+from superverse.dataset.formats.yolo import (load_yolo_annotations,
+                                             save_data_yaml,
+                                             save_yolo_annotations)
+from superverse.dataset.utils import (build_class_index_mapping,
+                                      map_detections_class_id,
+                                      merge_class_lists, save_dataset_images,
+                                      train_test_split)
 from superverse.detection.core import Detections
 from superverse.utils.internal import deprecated, warn_deprecated
 from superverse.utils.iterables import find_duplicates
@@ -303,7 +294,9 @@ class DetectionDataset(BaseDataset):
         image_paths_unique = list(dict.fromkeys(image_paths))
         if len(image_paths) != len(image_paths_unique):
             duplicates = find_duplicates(image_paths)
-            raise ValueError(f"Image paths {duplicates} are not unique across datasets.")
+            raise ValueError(
+                f"Image paths {duplicates} are not unique across datasets."
+            )
         image_paths = image_paths_unique
 
         classes = merge_class_lists(
@@ -541,7 +534,9 @@ class DetectionDataset(BaseDataset):
                 Argument is used only for segmentation datasets.
         """
         if images_directory_path is not None:
-            save_dataset_images(dataset=self, images_directory_path=images_directory_path)
+            save_dataset_images(
+                dataset=self, images_directory_path=images_directory_path
+            )
         if annotations_directory_path is not None:
             save_yolo_annotations(
                 dataset=self,
@@ -648,7 +643,9 @@ class DetectionDataset(BaseDataset):
                 Argument is used only for segmentation datasets.
         """
         if images_directory_path is not None:
-            save_dataset_images(dataset=self, images_directory_path=images_directory_path)
+            save_dataset_images(
+                dataset=self, images_directory_path=images_directory_path
+            )
         if annotations_path is not None:
             save_coco_annotations(
                 dataset=self,
@@ -698,28 +695,6 @@ class ClassificationDataset(BaseDataset):
                 "deprecated and will be removed in a future release. Use "
                 "a list of paths `List[str]` instead."
             )
-
-    @property
-    @deprecated(
-        "`DetectionDataset.images` property is deprecated and will be removed in "
-        "`superverse-0.26.0`. Iterate with `for path, image, annotation in dataset:` "
-        "instead."
-    )
-    def images(self) -> Dict[str, np.ndarray]:
-        """
-        Load all images to memory and return them as a dictionary.
-
-        !!! warning
-
-            Only use this when you need all images at once.
-            It is much more memory-efficient to initialize dataset with
-            image paths and use `for path, image, annotation in dataset:`.
-        """
-        if self._images_in_memory:
-            return self._images_in_memory
-
-        images = {image_path: cv2.imread(image_path) for image_path in self.image_paths}
-        return images
 
     def _get_image(self, image_path: str) -> np.ndarray:
         """Assumes that image is in dataset"""

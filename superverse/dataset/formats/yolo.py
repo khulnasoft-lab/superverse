@@ -2,20 +2,16 @@ import os
 from pathlib import Path
 from typing import TYPE_CHECKING, Dict, List, Optional, Tuple
 
-import cv2
 import numpy as np
+from PIL import Image
 
 from superverse.config import ORIENTED_BOX_COORDINATES
 from superverse.dataset.utils import approximate_mask_with_polygons
 from superverse.detection.core import Detections
 from superverse.detection.utils import polygon_to_mask, polygon_to_xyxy
-from superverse.utils.file import (
-    list_files_with_extensions,
-    read_txt_file,
-    read_yaml_file,
-    save_text_file,
-    save_yaml_file,
-)
+from superverse.utils.file import (list_files_with_extensions, read_txt_file,
+                                   read_yaml_file, save_text_file,
+                                   save_yaml_file)
 
 if TYPE_CHECKING:
     from superverse.dataset.core import DetectionDataset
@@ -153,7 +149,18 @@ def load_yolo_annotations(
     image_paths = [
         str(path)
         for path in list_files_with_extensions(
-            directory=images_directory_path, extensions=["jpg", "jpeg", "png"]
+            directory=images_directory_path,
+            extensions=[
+                "bmp",
+                "dng",
+                "jpg",
+                "jpeg",
+                "mpo",
+                "png",
+                "tif",
+                "tiff",
+                "webp",
+            ],
         )
     ]
 
@@ -167,10 +174,16 @@ def load_yolo_annotations(
             annotations[image_path] = Detections.empty()
             continue
 
-        image = cv2.imread(image_path)
+        # PIL is much faster than cv2 for checking image shape and mode: https://github.com/khulnasoft/superverse/issues/1554
+        image = Image.open(image_path)
         lines = read_txt_file(file_path=annotation_path, skip_empty=True)
-        h, w, _ = image.shape
+        w, h = image.size
         resolution_wh = (w, h)
+        if image.mode not in ("RGB", "L"):
+            raise ValueError(
+                f"Images must be 'RGB' or 'grayscale', \
+                but {image_path} mode is '{image.mode}'."
+            )
 
         with_masks = _with_mask(lines=lines)
         with_masks = force_masks if force_masks else with_masks

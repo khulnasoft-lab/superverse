@@ -6,13 +6,9 @@ import pytest
 
 from superverse import Detections
 from superverse.dataset.formats.coco import (
-    build_coco_class_index_mapping,
-    classes_to_coco_categories,
-    coco_annotations_to_detections,
-    coco_categories_to_classes,
-    detections_to_coco_annotations,
-    group_coco_annotations_by_image_id,
-)
+    build_coco_class_index_mapping, classes_to_coco_categories,
+    coco_annotations_to_detections, coco_categories_to_classes,
+    detections_to_coco_annotations, group_coco_annotations_by_image_id)
 
 
 def mock_coco_annotation(
@@ -172,7 +168,11 @@ def test_group_coco_annotations_by_image_id(
             DoesNotRaise(),
         ),  # empty image annotations
         (
-            [mock_coco_annotation(category_id=0, bbox=(0, 0, 100, 100), area=100 * 100)],
+            [
+                mock_coco_annotation(
+                    category_id=0, bbox=(0, 0, 100, 100), area=100 * 100
+                )
+            ],
             (1000, 1000),
             False,
             Detections(
@@ -193,7 +193,9 @@ def test_group_coco_annotations_by_image_id(
             (1000, 1000),
             False,
             Detections(
-                xyxy=np.array([[0, 0, 100, 100], [100, 100, 200, 200]], dtype=np.float32),
+                xyxy=np.array(
+                    [[0, 0, 100, 100], [100, 100, 200, 200]], dtype=np.float32
+                ),
                 class_id=np.array([0, 0], dtype=int),
             ),
             DoesNotRaise(),
@@ -435,7 +437,11 @@ def test_build_coco_class_index_mapping(
             ),
             0,
             0,
-            [mock_coco_annotation(category_id=0, bbox=(0, 0, 100, 100), area=100 * 100)],
+            [
+                mock_coco_annotation(
+                    category_id=0, bbox=(0, 0, 100, 100), area=100 * 100
+                )
+            ],
             DoesNotRaise(),
         ),  # no segmentation mask
         (
